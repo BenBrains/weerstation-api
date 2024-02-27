@@ -16,8 +16,8 @@ return new class extends Migration {
             $table->string('location');
             $table->string('hardware_version');
             $table->string('software_version');
-            $table->float('lat');
-            $table->float('lon');
+            $table->float('lat')->nullable();
+            $table->float('lon')->nullable();
         });
     }
 

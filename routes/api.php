@@ -24,12 +24,14 @@ Route::get('/', function () {
     return response()->json(['message' => 'Alive and kicking']);
 });
 
-Route::post('/insert', function (Request $request) {
-    $body = $request->getContent();
-    return response()->json(['message' => 'Data received', 'data' => $body]);
-});
+//Route::post('/insert', function (Request $request) {
+//    $body = $request->getContent();
+//    return response()->json(['message' => 'Data received', 'data' => $body]);
+//});
 
 Route::get('/stations', [StationController::class, 'index']);
+Route::post('/stations', [StationController::class, 'store']);
+//Route::patch('/stations/{id}', [StationController::class, 'update']);
 Route::get('/stations/{id}', [StationController::class, 'show']);
 
 Route::get('/sensors', [SensorController::class, 'index']);

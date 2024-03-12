@@ -2,20 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\SensorResource;
+use App\Http\Resources\SensorWithDataResource;
 use App\Models\Datapoint;
 use App\Models\Sensor;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class SensorController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * All sensors.
+     *
+     * Returns all sensors in the database.
      */
     public function index()
     {
-        $data = Sensor::get();
-        return $data;
+        $data = Sensor::all();
+        return SensorResource::collection($data);
+
     }
 
     /**
@@ -35,13 +41,12 @@ class SensorController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Specified sensor.
      */
     public function show(string $id)
     {
         $sensorData = Sensor::find($id);
-        $sensorData->datapoints = Datapoint::where('sensor_id', $id)->get();
-        return $sensorData;
+        return new SensorResource($sensorData);
     }
 
     /**
@@ -69,9 +74,7 @@ class SensorController extends Controller
     }
 
     /**
-     * Fetch the recent data for a sensor
-     * @param Request $request
-     * @param string $id
+     * Recent data from a sensor.
      */
     public function recent(Request $request, string $id)
     {
@@ -133,13 +136,11 @@ class SensorController extends Controller
                     ->get();
         }
 
-        return $sensor;
+        return new SensorWithDataResource($sensor);
     }
 
     /**
-     * Fetch the data for a sensor between two timestamps
-     * @param Request $request
-     * @param string $id
+     * Data between two timestamps.
      */
     public function between(Request $request, string $id)
     {
@@ -156,6 +157,6 @@ class SensorController extends Controller
             ->where('timestamp', '<=', $end)
             ->get();
 
-        return $sensor;
+        return new SensorWithDataResource($sensor);
     }
 }

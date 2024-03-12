@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Sensor extends Model
 {
     use HasFactory;
-
     protected $table = 'sensors';
+
+    public function datapoints() {
+        return $this->hasMany(DataPoint::class);
+    }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HealthController;
 use App\Http\Controllers\StationController;
 use App\Http\Controllers\SensorController;
 use Illuminate\Http\Request;
@@ -21,13 +22,10 @@ use Illuminate\Support\Facades\Route;
 //});
 
 Route::get('/', function () {
-    return response()->json(['message' => 'Alive and kicking']);
+    return response()->json(['message' => 'Alive and kicking, welcome to the API!']);
 });
 
-//Route::post('/insert', function (Request $request) {
-//    $body = $request->getContent();
-//    return response()->json(['message' => 'Data received', 'data' => $body]);
-//});
+Route::get('/health', [HealthController::class, 'status']);
 
 Route::get('/stations', [StationController::class, 'index']);
 Route::post('/stations', [StationController::class, 'store']);

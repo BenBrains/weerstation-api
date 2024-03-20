@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\StationResource;
 use App\Models\Station;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Validation\Validator;
 
 class StationController extends Controller
 {
@@ -46,26 +49,35 @@ class StationController extends Controller
      */
     public function store(Request $request)
     {
-        $body = $request->json()->all();
+        /*
+            This feels so hacky
+            I'm not sure if this is the best way to handle validation errors
+            Actually, I'm pretty sure it's not
 
-        $requiredKeys = ['name', 'location', 'hardware_version', 'software_version'];
-        $missingKeys = array_diff_key(array_flip($requiredKeys), $body);
-
-        if (!empty($missingKeys)) return response()->json(['error' => 'ERR_BAD_REQUEST', 'message' => 'Missing required fields'], 400);
-//
-        $stationExists = Station::where('name', $body['name'])->first();
-        if (!empty($stationExists)) return response()->json(['error' => 'ERR_CONFLICT', 'message' => 'Station already exists'], 409);
-
+            I'm probably just doing it wrong
+         */
         try {
-            $station = Station::create($body);
+            $request->validate([
+                'name' => 'required',
+                'location' => 'min:200|required',
+                'hardware_version' => 'required',
+                'software_version' => 'required',
+            ]);
+        } catch (ValidationException $e) {
             return response()->json([
-                'message' => 'STATION_CREATED',
-                'data' => new StationResource($station)
-            ], 201);
-        } catch (\Exception $e) {
-            echo $e;
-            return response()->json(['error' => 'ERR_INTERNAL_SERVER', 'message' => 'Internal Server Error'], 500);
+                'error' => 'ERR_VALIDATION',
+                'message' => $e->errors(),
+            ], $e->status);
         }
+
+        $station = Station::where('name', $request->name)->first();
+        if ($station) return response()->json(['error' => 'ERR_CONFLICT', 'message' => 'Station already exists'], 409);
+
+        $station = Station::create($request->only(['name', 'location', 'hardware_version', 'software_version', 'lat', 'lon']));
+        return response()->json([
+            'message' => 'STATION_CREATED',
+            'data' => new StationResource($station)
+        ], 201);
     }
 
     /**

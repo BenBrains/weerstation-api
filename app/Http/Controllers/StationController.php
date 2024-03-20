@@ -34,21 +34,38 @@ class StationController extends Controller
      * Create a new station with the provided data. Returns:
      * - 201 Created on success
      * - 409 Conflict if the station already exists.
-     *
-     * @bodyParam name string required The name of the station.
-     * @bodyParam location string required The location of the station.
-     * @bodyParam hardware_version string The hardware version of the station.
-     * @bodyParam software_version string The software version of the station.
-     * @bodyParam lat float required The latitude of the station.
-     * @bodyParam lon float required The longitude of the station.
-     *
-     * @param Request $request The HTTP request.
-     * @return JsonResponse The HTTP response.
+     * ```json
+     * {
+     *      "name": "string",
+     *      "location": "string",
+     *      "hardware_version": "string",
+     *      "software_version": "string",
+     *      "lat": 0,
+     *      "lon": 0
+     * }
      */
     public function store(Request $request)
     {
         $body = $request->json()->all();
-        return response()->json(['message' => 'Data received', 'data' => $body]);
+
+        $requiredKeys = ['name', 'location', 'hardware_version', 'software_version'];
+        $missingKeys = array_diff_key(array_flip($requiredKeys), $body);
+
+        if (!empty($missingKeys)) return response()->json(['error' => 'ERR_BAD_REQUEST', 'message' => 'Missing required fields'], 400);
+//
+        $stationExists = Station::where('name', $body['name'])->first();
+        if (!empty($stationExists)) return response()->json(['error' => 'ERR_CONFLICT', 'message' => 'Station already exists'], 409);
+
+        try {
+            $station = Station::create($body);
+            return response()->json([
+                'message' => 'STATION_CREATED',
+                'data' => new StationResource($station)
+            ], 201);
+        } catch (\Exception $e) {
+            echo $e;
+            return response()->json(['error' => 'ERR_INTERNAL_SERVER', 'message' => 'Internal Server Error'], 500);
+        }
     }
 
     /**

@@ -31,7 +31,6 @@ Route::get('/', function () {
 
 Route::get('/stations', [StationController::class, 'index']);
 Route::post('/stations', [StationController::class, 'store']);
-//Route::patch('/stations/{id}', [StationController::class, 'update']);
 Route::get('/stations/{id}', [StationController::class, 'show']);
 
 Route::get('/sensors', [SensorController::class, 'index']);

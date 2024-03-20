@@ -18,8 +18,8 @@ class StationResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'location' => $this->location,
-            'hardware_version' => $this->depth,
-            'software_version' => $this->type,
+            'hardware_version' => $this->hardware_version,
+            'software_version' => $this->software_version,
             'lat' => $this->lat,
             'lon' => $this->lon,
         ];

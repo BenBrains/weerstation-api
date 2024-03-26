@@ -1,4 +1,4 @@
-# 🔎 Weerstation API
+# 🔎 LongBois™️ Weerstation API
 > The API for a school project, a so called 'weather station'. It actually isn't one, but that's the name..
 
 > [!CAUTION]

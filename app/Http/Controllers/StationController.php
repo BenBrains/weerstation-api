@@ -59,7 +59,7 @@ class StationController extends Controller
         try {
             $request->validate([
                 'name' => 'required',
-                'location' => 'min:200|required',
+                'location' => 'required',
                 'hardware_version' => 'required',
                 'software_version' => 'required',
             ]);

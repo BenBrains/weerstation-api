@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Weerstation API</title>
+    <title>LongBois™️</title>
     <meta name="description"
           content="The one and only API for the weerstation project. Built with Laravel and open-source.">
 

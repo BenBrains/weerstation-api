@@ -27,12 +27,14 @@ Route::get('/', function () {
 
 Route::get('/health', [HealthController::class, 'status']);
 
-Route::get('/stations', [StationController::class, 'index']);
-Route::post('/stations', [StationController::class, 'store']);
-Route::get('/stations/{id}', [StationController::class, 'show']);
+Route::middleware('api_key')->group(function () {
+    Route::get('/stations', [StationController::class, 'index']);
+    Route::post('/stations', [StationController::class, 'store']);
+    Route::get('/stations/{id}', [StationController::class, 'show']);
 
-Route::get('/sensors', [SensorController::class, 'index']);
-Route::post('/sensors', [SensorController::class, 'store']);
-Route::get('/sensors/{id}', [SensorController::class, 'show']);
-Route::get('/sensors/{id}/recent', [SensorController::class, 'recent']);
-Route::get('/sensors/{id}/between', [SensorController::class, 'between']);
+    Route::get('/sensors', [SensorController::class, 'index']);
+    Route::post('/sensors', [SensorController::class, 'store']);
+    Route::get('/sensors/{id}', [SensorController::class, 'show']);
+    Route::get('/sensors/{id}/recent', [SensorController::class, 'recent']);
+    Route::get('/sensors/{id}/between', [SensorController::class, 'between']);
+});

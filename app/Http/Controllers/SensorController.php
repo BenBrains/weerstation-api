@@ -6,6 +6,7 @@ use App\Http\Resources\SensorResource;
 use App\Http\Resources\SensorWithDataResource;
 use App\Models\Datapoint;
 use App\Models\Sensor;
+use App\Models\Station;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -37,7 +38,36 @@ class SensorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        /*
+            This feels so hacky
+            I'm not sure if this is the best way to handle validation errors
+            Actually, I'm pretty sure it's not
+
+            I'm probably just doing it wrong
+         */
+        try {
+            $request->validate([
+                'station_id' => 'required',
+                'name' => 'required',
+                'type' => 'required',
+                'unit' => 'required',
+            ]);
+
+            $station = Station::where('id', $request->station_id)->first();
+            if (!$station) return response()->json(['error' => 'ERR_STATION_NOT_FOUND', 'message' => 'Station not found'], 404);
+
+            $sensor = Sensor::create($request->only(['station_id', 'name', 'type', 'unit', 'depth']));
+            return response()->json([
+                'message' => 'SENSOR_CREATED',
+                'data' => new SensorResource($sensor)
+            ], 201);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'ERR_EXCEPTION',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**

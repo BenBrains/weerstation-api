@@ -32,6 +32,7 @@ Route::post('/stations', [StationController::class, 'store']);
 Route::get('/stations/{id}', [StationController::class, 'show']);
 
 Route::get('/sensors', [SensorController::class, 'index']);
+Route::post('/sensors', [SensorController::class, 'store']);
 Route::get('/sensors/{id}', [SensorController::class, 'show']);
 Route::get('/sensors/{id}/recent', [SensorController::class, 'recent']);
 Route::get('/sensors/{id}/between', [SensorController::class, 'between']);

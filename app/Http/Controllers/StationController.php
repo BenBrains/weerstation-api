@@ -14,6 +14,10 @@ class StationController extends Controller
 {
     /**
      * All stations.
+     *
+     * Returns a list of all stations.
+     * <br>
+     * 🔑 `API_KEY` header required.
      */
     public function index()
     {
@@ -34,18 +38,11 @@ class StationController extends Controller
     /**
      * Create a new station.
      *
-     * Create a new station with the provided data. Returns:
-     * - 201 Created on success
-     * - 409 Conflict if the station already exists.
-     * ```json
-     * {
-     *      "name": "string",
-     *      "location": "string",
-     *      "hardware_version": "string",
-     *      "software_version": "string",
-     *      "lat": 0,
-     *      "lon": 0
-     * }
+     * Create a new station with the provided data.
+     * <br>
+     * 🔑 `API_KEY` header required.
+     *
+     * > _I have no idea why statuscode `200` is in this list. Just ignore this for now._
      */
     public function store(Request $request)
     {
@@ -82,6 +79,10 @@ class StationController extends Controller
 
     /**
      * Specific station.
+     *
+     * Returns the specified station.
+     * <br>
+     * 🔑 `API_KEY` header required.
      */
     public function show(string $id)
     {

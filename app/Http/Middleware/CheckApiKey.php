@@ -20,7 +20,7 @@ class CheckApiKey
         $apiKey = $request->header('API_KEY');
 
         if ($apiKey !== config('app.api_key')) {
-            return response()->json(['error' => 'Invalid API Key'], 401);
+            return response()->json(['error' => 'ERR_NO_KEY', 'message' => 'Invalid or missing API key'], 401);
         }
 
         return $next($request);

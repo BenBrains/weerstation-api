@@ -17,12 +17,13 @@ class SensorController extends Controller
      * All sensors.
      *
      * Returns all sensors in the database.
+     * <br>
+     * 🔑 `API_KEY` header required.
      */
     public function index()
     {
         $data = Sensor::all();
         return SensorResource::collection($data);
-
     }
 
     /**
@@ -34,7 +35,11 @@ class SensorController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Create a new sensor.
+     *
+     * Create a new sensor with the provided data.
+     * <br>
+     * 🔑 `API_KEY` header required.
      */
     public function store(Request $request)
     {
@@ -72,6 +77,10 @@ class SensorController extends Controller
 
     /**
      * Specified sensor.
+     *
+     * Returns the sensor with the specified ID.
+     * <br>
+     * 🔑 `API_KEY` header required.
      */
     public function show(string $id)
     {
@@ -105,6 +114,10 @@ class SensorController extends Controller
 
     /**
      * Recent data from a sensor.
+     *
+     * Returns the most recent data from a sensor.
+     * <br>
+     * 🔑 `API_KEY` header required.
      */
     public function recent(Request $request, string $id)
     {
@@ -171,6 +184,20 @@ class SensorController extends Controller
 
     /**
      * Data between two timestamps.
+     *
+     * Returns the data between two timestamps.
+     * <br>
+     * 🔑 `API_KEY` header required.
+     *
+     * ---
+     *
+     * URL Parameters:
+     * - start: The start date of the range. Format: YYYY-MM-DD
+     * - end: The end date of the range. Format: YYYY-MM-DD
+     *
+     * @param Request $request
+     * @param string $id
+     * @return SensorWithDataResource
      */
     public function between(Request $request, string $id)
     {

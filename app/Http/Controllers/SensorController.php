@@ -216,4 +216,35 @@ class SensorController extends Controller
 
         return new SensorWithDataResource($sensor);
     }
+
+    /**
+     * Store data for a sensor or multiple sensors.
+     *
+     * Store data for a sensors with their specified IDs. Supports an object or an array of objects.
+     * <br>
+     * 🔑 `API_KEY` header required.
+     */
+    public function storeData(Request $request)
+    {
+        $data = $request->all();
+
+        // PHP is weird, why does is_array return true for an object? I don't get it...
+        if (array_keys($data) === array_keys(array_values($data))) {
+            foreach ($data as $datapoint) {
+                Datapoint::create([
+                    'sensor_id' => $datapoint['sensor_id'],
+                    'value' => $datapoint['value'],
+                    'timestamp' => $request->timestamp ?? now(),
+                ]);
+            }
+        } else {
+            Datapoint::create([
+                'sensor_id' => $data['sensor_id'],
+                'value' => $data['value'],
+                'timestamp' => $request->timestamp ?? now(),
+            ]);
+        }
+
+        return response()->json(['message' => 'DATA_STORED'], 201);
+    }
 }

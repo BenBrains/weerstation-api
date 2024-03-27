@@ -34,6 +34,7 @@ Route::middleware('api_key')->group(function () {
 
     Route::get('/sensors', [SensorController::class, 'index']);
     Route::post('/sensors', [SensorController::class, 'store']);
+    Route::post('/sensors/data', [SensorController::class, 'storeData']);
     Route::get('/sensors/{id}', [SensorController::class, 'show']);
     Route::get('/sensors/{id}/recent', [SensorController::class, 'recent']);
     Route::get('/sensors/{id}/between', [SensorController::class, 'between']);

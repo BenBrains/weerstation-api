@@ -9,5 +9,12 @@ class Datapoint extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
     protected $table = 'datapoints';
+
+    protected $fillable = [
+        'sensor_id',
+        'value',
+        'timestamp'
+    ];
 }
